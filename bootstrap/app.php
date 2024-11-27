@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
+    ->withRouting(
+        api: __DIR__.'/../routes/api_v1.php',
+        apiPrefix: 'api/v1',
+        health: '/up/v1',
+    )
     ->withMiddleware(function (Middleware $middleware) {
         //
     })
