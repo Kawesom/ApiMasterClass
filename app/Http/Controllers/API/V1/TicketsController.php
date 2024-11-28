@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tickets;
 use App\Http\Requests\API\V1\StoreTicketsRequest;
 use App\Http\Requests\API\V1\UpdateTicketsRequest;
+use App\Http\Resources\V1\TicketsResource;
 
 class TicketsController extends Controller
 {
@@ -14,7 +15,7 @@ class TicketsController extends Controller
      */
     public function index()
     {
-        return Tickets::all();
+        return TicketsResource::collection(Tickets::paginate());
     }
 
     /**
@@ -28,15 +29,15 @@ class TicketsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tickets $tickets)
+    public function show(Tickets $ticket)
     {
-        //
+        return new TicketsResource($ticket);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTicketsRequest $request, Tickets $tickets)
+    public function update(UpdateTicketsRequest $request, Tickets $ticket)
     {
         //
     }
@@ -44,7 +45,7 @@ class TicketsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tickets $tickets)
+    public function destroy(Tickets $ticket)
     {
         //
     }

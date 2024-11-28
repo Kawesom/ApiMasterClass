@@ -16,7 +16,7 @@ class AuthController extends Controller
         $request->validated();
 
         if (!Auth::attempt($request->only('email','password'))) {
-            return $this->error([],'Validation Failed Fuck Off!',401);
+            return $this->error('Validation Failed Fuck Off!', [],401);
         }
 
         $user = User::firstWhere('email',request('email'));
@@ -26,8 +26,9 @@ class AuthController extends Controller
             [
                 'token' => $user->createToken('Api Token for '. $user->email,
             ['*'],
-            now()->addMinutes(5))->plainTextToken
-            ]
+            //now()->addMinutes(5)
+            )->plainTextToken
+            ],
         );
     }
 
