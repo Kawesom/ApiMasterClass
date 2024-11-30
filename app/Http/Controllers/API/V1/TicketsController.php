@@ -32,7 +32,7 @@ class TicketsController extends ApiController
      */
     public function show(Tickets $ticket)
     {
-        if($this->include('author')) {
+        if($this->include('authors')) {
             return new TicketsResource($ticket->load('users'));
         }
         return new TicketsResource($ticket);

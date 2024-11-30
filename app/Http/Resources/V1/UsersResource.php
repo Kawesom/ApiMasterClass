@@ -22,7 +22,7 @@ class UsersResource extends JsonResource
                 'name' => $this->name,
                 'email' => $this->email,
                 $this->mergeWhen(
-                    $request->routeIs('user.*'), [
+                    $request->routeIs('authors.*'), [
                         'emailVerifiedAt' => $this->email_verified_at,
                         'createdAt' => $this->created_at,
                         'updatedAt' => $this->updated_at,
@@ -31,7 +31,7 @@ class UsersResource extends JsonResource
             ],
             'includes' => TicketsResource::collection($this->whenLoaded('tickets')),
             'links' => [
-                ['self' => route('user.show',['user' => $this->id])]
+                'self' => route('authors.show',['author' => $this->id])
             ]
         ];
     }

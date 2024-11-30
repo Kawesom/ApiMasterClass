@@ -11,12 +11,14 @@ class TicketFilter extends QueryFilter {
     public function status($value) {
         return $this->builder->whereIn('status',explode(',',$value));
     }
+    //url to test http://127.0.0.1:8000/api/v1/tickets?filter[status]=Completed
 
     public function title($value) {
         $likeStr = str_replace('*','%',$value);
 
         return $this->builder->where('title','ilike',$likeStr);
     }
+
 
     public function createdAt($value) {
         $dates = explode(',',$value);
@@ -38,5 +40,6 @@ class TicketFilter extends QueryFilter {
         }
 
         return $this->builder->whereDate('updated_at', $dates);
+        //url to test http://127.0.0.1:8000/api/v1/tickets?filter[createdAt]=2024-11-28,2024-11-29
     }
 }
