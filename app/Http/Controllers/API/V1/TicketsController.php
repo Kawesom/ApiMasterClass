@@ -8,7 +8,7 @@ use App\Http\Requests\API\V1\StoreTicketsRequest;
 use App\Http\Requests\API\V1\UpdateTicketsRequest;
 use App\Http\Resources\V1\TicketsResource;
 
-class TicketsController extends Controller
+class TicketsController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -31,6 +31,9 @@ class TicketsController extends Controller
      */
     public function show(Tickets $ticket)
     {
+        if($this->include('author')) {
+            return new TicketsResource($ticket->load('users'));
+        }
         return new TicketsResource($ticket);
     }
 

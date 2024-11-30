@@ -8,14 +8,16 @@ use App\Http\Requests\API\V1\StoreUserRequest;
 use App\Http\Requests\API\V1\UpdateUserRequest;
 use App\Http\Resources\V1\UsersResource;
 
-class UsersController extends Controller
+class UsersController extends ApiController
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return UsersResource::collection(User::paginate());
+        if ($this->include('tickets')) {
+            return UsersResource::collection(User::with('tickets')->paginate());
+        }
     }
 
     /**
@@ -39,6 +41,9 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
+        if ($this->include('tickets')) {
+            return new UsersResource($user->load('tickets'));
+        }
         return new UsersResource($user);
     }
 
