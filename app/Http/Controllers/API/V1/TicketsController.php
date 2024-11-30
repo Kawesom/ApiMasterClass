@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\V1\TicketFilter;
 use App\Models\Tickets;
 use App\Http\Requests\API\V1\StoreTicketsRequest;
 use App\Http\Requests\API\V1\UpdateTicketsRequest;
@@ -13,9 +14,9 @@ class TicketsController extends ApiController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(TicketFilter $filters)
     {
-        return TicketsResource::collection(Tickets::paginate());
+        return TicketsResource::collection(Tickets::filter($filters)->paginate());
     }
 
     /**
