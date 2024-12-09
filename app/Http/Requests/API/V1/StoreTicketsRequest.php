@@ -11,7 +11,7 @@ class StoreTicketsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -20,9 +20,23 @@ class StoreTicketsRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
+    {      //the dots('.') in the keys are for accessing elements in the data json response array
+        $rules = [
+            'data.attributes.title' => ['required','string'],
+            'data.attributes.description' => ['required','string'],
+            'data.attributes.status' => ['required','string','in:Completed,Cancelled,Hold,Active'],
+        ];
+
+        if($this->routeIs('tickets.store')) {
+            $rules['data.relationships.author.data.id'] = ['required','integer'];
+        }
+
+        return $rules;
+    }
+
+    public function messages() {
         return [
-            //
+            'data.attributes.status' => 'The value given was invalid, please use Active, Completed, Hold or Cancelled.',
         ];
     }
 }

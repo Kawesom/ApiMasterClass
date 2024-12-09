@@ -14,6 +14,13 @@ class Tickets extends Model
     /** @use HasFactory<\Database\Factories\TicketsFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'description',
+        'status',
+        'users_id'
+    ];
+
     public function author(): BelongsTo {
         return $this->belongsTo(User::class, 'users_id');
     }
