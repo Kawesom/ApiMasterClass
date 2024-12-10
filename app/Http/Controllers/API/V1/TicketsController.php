@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Filters\V1\TicketFilter;
+use App\Http\Requests\API\V1\ReplaceTicketsRequest;
 use App\Models\Tickets;
 use App\Http\Requests\API\V1\StoreTicketsRequest;
 use App\Http\Requests\API\V1\UpdateTicketsRequest;
@@ -70,6 +71,27 @@ class TicketsController extends ApiController
     public function update(UpdateTicketsRequest $request, Tickets $ticket)
     {
         //
+    }
+
+    public function replace(ReplaceTicketsRequest $request, $ticket_id)
+    {
+        try {
+            $ticket = Tickets::findOrFail($ticket_id);
+
+            $model = [
+                'title' => $request->input('data.attributes.title'),
+                'description' => $request->input('data.attributes.description'),
+                'status' => $request->input('data.attributes.status'),
+                'users_id' => $request->input('data.relationships.author.data.id')
+            ];
+
+            $ticket->update($model);
+
+            return new TicketsResource($ticket);
+
+        } catch (ModelNotFoundException $exception) {
+            return $this->error("Ticket Cannot Be Found", [], 404);
+        }
     }
 
     /**

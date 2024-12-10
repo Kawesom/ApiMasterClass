@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Filters\V1\TicketFilter;
+use App\Http\Requests\API\V1\ReplaceTicketsRequest;
 use App\Http\Requests\API\V1\StoreTicketsRequest;
 use App\Http\Resources\V1\TicketsResource;
 use App\Models\Tickets;
@@ -39,6 +40,31 @@ class AuthorTicketsController extends ApiController
         return new TicketsResource(Tickets::create($model));
 
     }
+
+    public function replace(ReplaceTicketsRequest $request, $author_id, $ticket_id)
+    {
+        try {
+            $ticket = Tickets::findOrFail($ticket_id);
+
+            if ($author_id == $ticket->users_id) {
+
+                $model = [
+                    'title' => $request->input('data.attributes.title'),
+                    'description' => $request->input('data.attributes.description'),
+                    'status' => $request->input('data.attributes.status'),
+                    'users_id' => $request->input('data.relationships.author.data.id')
+                ];
+
+                $ticket->update($model);
+
+                return new TicketsResource($ticket);
+            }
+            // TODO: Ticket doesn't belong to user
+        } catch (ModelNotFoundException $exception) {
+            return $this->error("Ticket Cannot Be Found", [], 404);
+        }
+    }
+
 
     /**
      * Remove the specified resource from storage.
