@@ -10,17 +10,17 @@ class BaseTicketsRequest extends FormRequest
      * Maps any inputs that come with the request to the model parameters
      * @return void
      */
-    public function mappedAttributes()
+    public function mappedAttributes(array $otherAttributes = [])
     {
         //maps the incoming ticket request to the database column
-        $attributeMap = [
+        $attributeMap = array_merge([
             'data.attributes.title' => 'title',
             'data.attributes.description' => 'description',
             'data.attributes.status' => 'status',
             'data.attributes.createdAt' => 'created_at',
             'data.attributes.updatedAt' => 'updated_at',
             'data.relationships.author.data.id' => 'users_id',
-        ];
+        ], $otherAttributes);
 
         $attributesToUpdate = [];
 
