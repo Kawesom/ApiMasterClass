@@ -12,7 +12,7 @@ class BaseTicketsRequest extends FormRequest
      */
     public function mappedAttributes()
     {
-
+        //maps the incoming ticket request to the database column
         $attributeMap = [
             'data.attributes.title' => 'title',
             'data.attributes.description' => 'description',

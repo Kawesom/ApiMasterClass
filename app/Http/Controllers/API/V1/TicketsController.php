@@ -34,16 +34,13 @@ class TicketsController extends ApiController
         try {
             $user = User::findOrFail($request->input('data.relationships.author.data.id'));
 
-            $this->isAble('update',null);
+            $this->isAble('update',Tickets::class);//here
 
-            //TODO create ticket
-        }catch(ModelNotFoundException $exception) {
-            return $this->ok('User Not Found',[
-                'error' => 'The provided user id does not exist.'
-            ]);//$exception->getMessage();
+            return new TicketsResource(Tickets::create($request->mappedAttributes()));
+
+        } catch (AuthorizationException $exception) {
+            return $this->error('You are not authorized to update that resource',[], 403);
         }
-
-        return new TicketsResource($request->mappedAttributes());
 
     }
 

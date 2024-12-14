@@ -16,11 +16,10 @@ class TicketPolicy
         //
     }
 
-    public function store(User $user, Tickets $ticket) {
-        if($user->tokenCan(Abilities::CreateTicket)) {
-            return true;
-        }
-        return false;
+    public function store(User $user)
+    {
+        return $user->tokenCan(Abilities::CreateTicket) ||
+            $user->tokenCan(Abilities::CreateOwnTicket);
     }
 
     public function delete(User $user, Tickets $ticket) {
