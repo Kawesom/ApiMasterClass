@@ -34,7 +34,7 @@ class TicketsController extends ApiController
         try {
             $user = User::findOrFail($request->input('data.relationships.author.data.id'));
 
-            $this->isAble('update',Tickets::class);//here
+            $this->isAble('store',new Tickets());
 
             return new TicketsResource(Tickets::create($request->mappedAttributes()));
 
