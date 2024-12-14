@@ -19,6 +19,14 @@ class DatabaseSeeder extends Seeder
         Tickets::factory(100)
         ->recycle($user) //uses the user's id in the user table to assign tickets to each user randomly
         ->create();
+
+        User::create([
+            'email' => 'manage@manager.com',
+            'password' => bcrypt('password'),
+            'name' => "Mr. Wick",
+            'is_manager' => true
+        ]);
+
         /*
         User::factory()->create([
             'name' => 'Test User',
