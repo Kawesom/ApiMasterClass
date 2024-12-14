@@ -32,14 +32,11 @@ class TicketsController extends ApiController
     public function store(StoreTicketsRequest $request)
     {
         try {
-            $user = User::findOrFail($request->input('data.relationships.author.data.id'));
-
-            $this->isAble('store',new Tickets());
+            $this->isAble('store', new Tickets());
 
             return new TicketsResource(Tickets::create($request->mappedAttributes()));
-
         } catch (AuthorizationException $exception) {
-            return $this->error('You are not authorized to update that resource',[], 403);
+            return $this->error('You are not authorized to update that resource', [], 403);
         }
 
     }
