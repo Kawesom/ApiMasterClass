@@ -25,26 +25,16 @@ class UserController extends ApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreUserRequest $request)
     {
-        try {
-            $this->isAble('store',new User());
 
+        if ($this->isAble('store', new User())) {
             return new UsersResource(User::create($request->mappedAttributes()));
-
-        } catch (AuthorizationException $exception) {
-            return $this->error('You are not authorized to create that resource',[], 403);
         }
+
+        return $this->error('You are not authorized to create that resource', [], 403);
     }
 
     /**
@@ -63,15 +53,17 @@ class UserController extends ApiController
      */
     public function replace(ReplaceUserRequest $request, $user_id)
     {
-        //put
+        //put request
         try {
             $user = User::findOrFail($user_id);
 
-            $this->isAble('replace',$user);
+            if ($this->isAble('replace', $user)) {
+                $user->update($request->mappedAttributes());
 
-            $user->update($request->mappedAttributes());
+                return new UsersResource($user);
+            }
 
-            return new UsersResource($user);
+            return $this->error('You are not authorized to replace that resource', [], 401);
 
         } catch (ModelNotFoundException $exception) {
             return $this->error("User Cannot Be Found", [], 404);
@@ -87,16 +79,15 @@ class UserController extends ApiController
         try {
             $user = User::findOrFail($user_id);
 
-            $this->isAble('update',$user);
+            if ($this->isAble('update', $user)) {
+                $user->update($request->mappedAttributes());
 
-            $user->update($request->mappedAttributes());
+                return new UsersResource($user);
+            }
 
-            return new UsersResource($user);
-
+            return $this->error('You are not authorized to update that resource', [], 403);
         } catch (ModelNotFoundException $exception) {
             return $this->error("User Cannot Be Found", [], 404);
-        } catch (AuthorizationException $exception) {
-            return $this->error('You are not authorized to update that resource',[], 403);
         }
     }
 
@@ -108,13 +99,15 @@ class UserController extends ApiController
         try {
             $user = User::findOrFail($user_id);
 
-            $this->isAble('delete',$user);
+            if ($this->isAble('delete', $user)) {
+                $user->delete();
 
-            $user->delete();
+                return $this->ok('User Successfully deleted.');
+            }
 
-            return $this->ok('User Successfully deleted.');
+            return $this->error('You are not authorized to delete that resource', [], 403);
         } catch (ModelNotFoundException $exception) {
-            return $this->error("User Cannot Be Found",[],404);
+            return $this->error("User Cannot Be Found", [], 404);
         }
     }
 }

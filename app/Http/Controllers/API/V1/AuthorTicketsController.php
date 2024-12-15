@@ -35,54 +35,51 @@ class AuthorTicketsController extends ApiController
      */
     public function store(StoreTicketsRequest $request, $author_id)
     {
-        try {
-            //policy
-            $this->isAble('store',new Tickets());
-
+        //policy
+        if ($this->isAble('store', new Tickets())) {
             return new TicketsResource(Tickets::create($request->mappedAttributes([
                 'author' => 'users_id'
             ])));
-
-        } catch (AuthorizationException $exception) {
-            return $this->error($request->user()->name.' ,you are not authorized to create that resource',[], 403);
         }
+
+        return $this->error($request->user()->name . ' ,you are not authorized to create that resource', [], 403);
     }
 
-    public function update(UpdateTicketsRequest $request, $author_id,  $ticket_id) {
+    public function update(UpdateTicketsRequest $request, $author_id,  $ticket_id)
+    {
         // PUT
         try {
             $ticket = Tickets::where('id', $ticket_id)
                 ->where('users_id', $author_id)
                 ->firstOrFail();
 
-            $this->isAble('update', $ticket);
+            if ($this->isAble('update', $ticket)) {
+                $ticket->update($request->mappedAttributes());
+                return new TicketsResource($ticket);
+            }
 
-            $ticket->update($request->mappedAttributes());
-            return new TicketsResource($ticket);
-
+            return $this->error($request->user()->name . ', you are not authorized to update that resource', [], 403);
         } catch (ModelNotFoundException $exception) {
-            return $this->error($request->user()->name.', that ticket cannot be found.',[], 404);
-        } catch (AuthorizationException $exception) {
-            return $this->error($request->user()->name.', you are not authorized to update that resource',[], 403);
+            return $this->error($request->user()->name . ', that ticket cannot be found.', [], 404);
         }
     }
 
     public function replace(ReplaceTicketsRequest $request, $author_id, $ticket_id)
-    {//PATCH
+    { //PATCH
         try {
             $ticket = Tickets::where('id', $ticket_id)
                 ->where('users_id', $author_id)
                 ->firstOrFail();
 
-            $this->isAble('replace', $ticket);
+            if ($this->isAble('replace', $ticket)) {
+                $ticket->update($request->mappedAttributes());
 
-            $ticket->update($request->mappedAttributes());
+                return new TicketsResource($ticket);
+            }
+            return $this->error($request->user()->name . ', you are not authorized to replace that resource', [], 403);
 
-            return new TicketsResource($ticket);
         } catch (ModelNotFoundException $exception) {
-            return $this->error($request->user()->name." ,that ticket cannot be found", [], 404);
-        } catch (AuthorizationException $exception) {
-            return $this->error($request->user()->name.', you are not authorized to replace that resource',[], 403);
+            return $this->error($request->user()->name . " ,that ticket cannot be found", [], 404);
         }
     }
 
@@ -94,18 +91,17 @@ class AuthorTicketsController extends ApiController
     {
         try {
             $ticket = Tickets::where('id', $ticket_id)
-                            ->where('users_id', $author_id)
-                            ->firstOrFail();
+                ->where('users_id', $author_id)
+                ->firstOrFail();
 
-            $this->isAble('delete', $ticket);
+            if ($this->isAble('delete', $ticket)) {
+                $ticket->delete();
+                return $this->ok('Ticket Successfully deleted.');
+            }
 
-            $ticket->delete();
-            return $this->ok('Ticket Successfully deleted.');
-
+            return $this->error('You are not authorized to delete that resource.', [], 403);
         } catch (ModelNotFoundException $exception) {
             return $this->error("Ticket Cannot Be Found", [], 404);
-        } catch (AuthorizationException $exception) {
-            return $this->error('You are not authorized to delete that resource.',[], 403);
         }
     }
 }

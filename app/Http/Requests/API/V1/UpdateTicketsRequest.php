@@ -26,12 +26,12 @@ class UpdateTicketsRequest extends BaseTicketsRequest
             'data.attributes.title' => ['sometimes','string'],
             'data.attributes.description' => ['sometimes','string'],
             'data.attributes.status' => ['sometimes','string','in:Completed,Cancelled,Hold,Active'],
-            'data.relationships.author.data.id' => ['sometimes','integer'],
+            'data.relationships.author.data.id' => ['prohibited'],
         ];
 
         //forces them to only submit requests that hav title, description & status
-        if($this->user()->tokenCan(Abilities::UpdateOwnTicket)) {
-            $rules['data.relationships.author.data.id'] = "prohibited";
+        if($this->user()->tokenCan(Abilities::UpdateTicket)) {
+            $rules['data.relationships.author.data.id'] = ['sometimes','integer'];
         }
 
         return $rules;
