@@ -14,10 +14,23 @@ trait ApiResponses {
         ],$statusCode);
     }
 
-    protected function error($message, $data, $statusCode) {
-        return response()->json([
-            'Message' => $message,
+    protected function error($errors = [], $statusCode = null) {
+        if (is_string($errors)) {
+            return response()->json([
+            'Message' => $errors,
             'status' => $statusCode
         ],$statusCode);
+        }
+        return response()->json([
+            'errors' => $errors
+        ]);
+    }
+
+    protected function notAuthorized($message) {
+        return $this->error([
+            'status' => 401,
+            'message' => $message,
+            //'source' => ''
+        ]);
     }
 }
