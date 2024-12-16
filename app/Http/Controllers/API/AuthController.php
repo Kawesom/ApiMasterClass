@@ -13,11 +13,28 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     use ApiResponses;
+
+    /**
+     * Login
+     *
+     * Authenticates the user and returns the user's Api token
+     * @unauthenticated
+     * @group Authentication
+     * @response 200 {
+     * "data": {
+     *   "token": "{YOUR_AUTH_KEY}"
+     *   },
+     *   "Message": "Authenticated, Welcome Sheridan Brakus",
+     *   "status": 200
+     * }
+     * @param \App\Http\Requests\API\LoginRequest $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
     public function login(LoginRequest $request) {
         $request->validated();
 
         if (!Auth::attempt($request->only('email','password'))) {
-            return $this->error('Validation Failed Fuck Off!', [],401);
+            return $this->error('Validation Failed Fuck Off!', 401);
         }
 
         $user = User::firstWhere('email',request('email'));
@@ -38,6 +55,14 @@ class AuthController extends Controller
         return $this->ok('Register',[]);
     }
 
+    /**
+     * Logout
+     *
+     * Signs out the user and destroy's the Api Token
+     *
+     * @group Authentication
+     * @response 200 {}
+     */
     public function logout(Request $request) {
         $request->user()->currentAccessToken()->delete();
 

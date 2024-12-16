@@ -1,0 +1,108 @@
+name: Authentication
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/login
+    metadata:
+      groupName: Authentication
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: Login
+      description: "Authenticates the user and returns the user's Api token"
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: blanche.willms@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'Must be at least 8 characters.'
+        required: true
+        example: '[N`.2dH@lM)9!\>'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: blanche.willms@example.org
+      password: '[N`.2dH@lM)9!\>'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          "data": {
+            "token": "{YOUR_AUTH_KEY}"
+            },
+            "Message": "Authenticated, Welcome Sheridan Brakus",
+            "status": 200
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/logout
+    metadata:
+      groupName: Authentication
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: Logout
+      description: "Signs out the user and destroy's the Api Token"
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 7|g14lhBzNkScaqk0QZJYJdbDOwNWOZ1yAjJn91mjg72c6cdc3'
+    controller: null
+    method: null
+    route: null
+    custom: []

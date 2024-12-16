@@ -12,7 +12,11 @@ use App\Http\Resources\V1\UsersResource;
 class AuthorsController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * Get authors.
+     *
+     * Retrieves all users that created a ticket.
+     *
+     * @group Showing Authors
      */
     public function index(AuthorFilter $filters)
     {
@@ -24,23 +28,11 @@ class AuthorsController extends ApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreUserRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * Get an author.
+     *
+     * Retrieves all users that created a ticket.
+     *
+     * @group Showing Authors
      */
     public function show(User $author)
     {
@@ -50,27 +42,4 @@ class AuthorsController extends ApiController
         return new UsersResource($author);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateUserRequest $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        //
-    }
 }

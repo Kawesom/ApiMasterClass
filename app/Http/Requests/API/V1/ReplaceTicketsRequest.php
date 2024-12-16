@@ -22,9 +22,14 @@ class ReplaceTicketsRequest extends BaseTicketsRequest
     public function rules(): array
     {      //the dots('.') in the keys are for accessing elements in the data json response array
         $rules = [
+            'data' => ['required','array'],
+            'data.attributes' => ['required','array'],
             'data.attributes.title' => ['required','string'],
             'data.attributes.description' => ['required','string'],
             'data.attributes.status' => ['required','string','in:Completed,Cancelled,Hold,Active'],
+            'data.relationships' => 'required|array',
+            'data.relationships.author' => 'required|array',
+            'data.relationships.author.data' => 'required|array',
             'data.relationships.author.data.id' => ['required','integer'],
         ];
 

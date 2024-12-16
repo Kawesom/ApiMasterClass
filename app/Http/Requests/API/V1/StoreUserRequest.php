@@ -22,6 +22,8 @@ class StoreUserRequest extends BaseUserRequest
     public function rules(): array
     {
         $rules = [
+            'data' => 'required|array',
+            'data.attributes' => 'required|array',
             'data.attributes.name' => ['required','string'],
             'data.attributes.email' => ['required','email','unique:users,email'],
             'data.attributes.isManager' => ['required','boolean'],
