@@ -8,7 +8,7 @@ class BaseTicketsRequest extends FormRequest
 {
     /**
      * Maps any inputs that come with the request to the model parameters
-     * @return void
+     * @return array
      */
     public function mappedAttributes(array $otherAttributes = [])
     {

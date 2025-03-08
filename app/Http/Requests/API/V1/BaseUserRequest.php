@@ -8,11 +8,11 @@ class BaseUserRequest extends FormRequest
 {
     /**
      * Maps any inputs that come with the request to the model parameters
-     * @return void
+     * @return array
      */
     public function mappedAttributes(array $otherAttributes = [])
     {
-        //maps the incoming ticket request to the database column
+        //maps the incoming user request to the database column
         $attributeMap = array_merge([
             'data.attributes.name' => 'name',
             'data.attributes.email' => 'email',
